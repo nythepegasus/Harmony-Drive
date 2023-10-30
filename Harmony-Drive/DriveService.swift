@@ -26,6 +26,7 @@ public class DriveService: NSObject, Service
 
     public let localizedName = NSLocalizedString("Google Drive", comment: "")
     public let identifier = "com.rileytestut.Harmony.Drive"
+    public var refreshToken: String?
 
     public var clientID: String? {
         didSet {
@@ -143,6 +144,8 @@ extension DriveService: GIDSignInDelegate
             let user = try self.process(Result(user, error))
             
             self.service.authorizer = user.authentication.fetcherAuthorizer()
+            
+            self.refreshToken = user.authentication.refreshToken
             
             let account = Account(name: user.profile.name, emailAddress: user.profile.email)
             result = .success(account)
